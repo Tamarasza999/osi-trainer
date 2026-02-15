@@ -1,0 +1,20 @@
+docker network create --subnet=172.19.0.0/16 main-network && \
+docker network create --subnet=172.18.0.0/16 osi-network && \
+echo "=== Creating Containers ===" && \
+docker run -d --name server --network=main-network --ip=172.19.0.2 --cap-add=NET_ADMIN alpine sh -c "apk add python3 curl iptables iproute2 procps --no-cache && python3 -m http.server 80 & tail -f /dev/null" && \
+echo "server created: 172.19.0.2" && \
+docker run -d --name client --network=main-network --ip=172.19.0.3 --cap-add=NET_ADMIN alpine sh -c "apk add curl iptables iproute2 iputils python3 procps --no-cache && tail -f /dev/null" && \
+echo "client created: 172.19.0.3" && \
+docker run -d --name router --network=main-network --ip=172.19.0.4 --cap-add=NET_ADMIN --privileged alpine sh -c "apk add iptables iproute2 curl python3 procps --no-cache && echo 1 > /proc/sys/net/ipv4/ip_forward && tail -f /dev/null" && \
+echo "router created: 172.19.0.4" && \
+docker run -d --name attacker --network=main-network --ip=172.19.0.5 --cap-add=NET_ADMIN alpine sh -c "apk add nmap curl iptables iproute2 python3 procps --no-cache && tail -f /dev/null" && \
+echo "attacker created: 172.19.0.5" && \
+docker run -d --name osi-server --network=osi-network --ip=172.18.0.4 --cap-add=NET_ADMIN alpine sh -c "apk add python3 curl iptables iproute2 procps --no-cache && python3 -m http.server 8080 & tail -f /dev/null" && \
+echo "osi-server created: 172.18.0.4" && \
+docker network connect --ip 172.18.0.5 osi-network router && \
+docker network connect --ip 172.18.0.3 osi-network client && \
+echo "networks connected" && \
+sleep 3 && \
+docker exec client ip route add 172.18.0.0/16 via 172.19.0.4 && \
+echo "routing configured" && \
+echo "=== Setup Complete ==="
