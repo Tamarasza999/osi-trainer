@@ -1,4 +1,4 @@
-# Advanced OSI Troubleshooting Trainer  
+# OSI Troubleshooting Trainer  
 *A Docker based network troubleshooting simulator for practicing OSI layer diagnostics*
 
 > Practice real network troubleshooting by generating realistic failures across all 7 OSI layers. The trainer injects problems into isolated Docker containers, then allows you to diagnose and fix them inside a controlled lab environment.
