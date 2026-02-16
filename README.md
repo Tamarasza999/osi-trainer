@@ -52,16 +52,16 @@ self.stats = {
 
 ## Deployment
 
-### 1. Prerequisites
+### 1. Requirements
 
-Docker installed and running  
-Python 3.6 or newer  
+- Docker installed and running  
+- Python 3.6 or newer  
 
 ### 2. Clone and Setup
 
 ```bash
-git clone https://github.com/yourusername/osi-troubleshooting-trainer.git
-cd osi-troubleshooting-trainer
+git clone https://github.com/Tamarasza999/osi-trainer.git
+cd osi-trainer
 ```
 
 ### 3. Create the Docker network and containers
